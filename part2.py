@@ -1,6 +1,14 @@
 import pandas as pd
 import numpy as np
 from scipy import stats
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
+from sklearn.model_selection import train_test_split
+import statsmodels.api as sm
+from scipy import stats
+import seaborn as sns
+
 
 
 # Load the dataset into a pandas DataFrame
@@ -52,10 +60,6 @@ for col in numeric_cols:
     else:
         print(f"Column {col} does not have a highly skewed distribution (skewness: {skewness}).")
 
-
-import numpy as np
-import pandas as pd
-from scipy import stats
 
 # Create a copy of the original data
 cleanedData = data.copy()
@@ -188,15 +192,6 @@ print(cleanedData.dtypes)
 cleanedData.to_csv('cleaned_financial_data.csv')
 # print("Saved cleaned data to file")
 
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
-from sklearn.model_selection import train_test_split
-import statsmodels.api as sm
-from scipy import stats
-import seaborn as sns
 
 
 print(f"Dataset shape: {cleanedData.shape}")
