@@ -73,7 +73,7 @@ class BlackScholesSimulator:
     def export_dataset(self, filename="option_dataset.csv"):
         """Exports the full dataset to a CSV file."""
         if hasattr(self, 'full_dataset'):
-            self.full_dataset.to_csv(filename, index=False)
+            self.full_dataset.to_csv(filename, index=False, sep='\t')
             print(f"Dataset exported successfully to {filename}")
         else:
             print("Dataset has not been generated yet. Run generate_option_dataset() first.")
