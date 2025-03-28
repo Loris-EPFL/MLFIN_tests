@@ -193,8 +193,12 @@ plt.show()
 print(f"Correlation between Book-to-Market and Returns: {df[btm_col].corr(df[returns_col]):.4f}")
 
 # 3. Split data into training and testing sets
-X = df[btm_col].values.reshape(-1, 1)
-y = df[returns_col].values
+X_unscaled = df.drop(columns='ret')
+X_unscaled = X_unscaled.apply(pd.to_numeric, errors='coerce')
+X = (X_unscaled-X_unscaled.mean(axis=0))/X_unscaled.std(axis=0)
+
+y = df['ret']
+y = y.apply(pd.to_numeric, errors='coerce')
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 print(f"Training set: {X_train.shape[0]} samples")
@@ -229,7 +233,7 @@ print("\nDetailed Regression Results (statsmodels):")
 print(model_sm.summary())
 
 # 6. Manual OLS Calculation to verify results
-# Formula: β = (X'X)^(-1)X'y
+# Formula: β = (X'X)^(-1)X'y (Linear Regression Coefficients)
 
 # Prepare data
 X_manual = np.column_stack((np.ones(X_train.shape[0]), X_train))  # Add constant
