@@ -53,8 +53,6 @@ non_numeric_cols = df.select_dtypes(exclude=['int64', 'float64']).columns
 for col in numeric_cols:
     if df[col].isnull().any():
         print(f"Column {col} contains null values.")
-    else:
-        print(f"Column {col} does not contain null values.")
 
 # Check date format consistency
 date_col = 'date'  # Replace 'date' with the actual column name
@@ -71,8 +69,7 @@ for col in numeric_cols:
     skewness = stats.skew(df[col])
     if abs(skewness) > 2:
         print(f"Column {col} has a highly skewed distribution (skewness: {skewness}).")
-    else:
-        print(f"Column {col} does not have a highly skewed distribution (skewness: {skewness}).")
+ 
 
 # Define numeric columns if not already defined
 numeric_cols = [col for col in df.columns if df[col].dtype.kind in 'bifc']
@@ -82,8 +79,7 @@ for col in numeric_cols:
     if df[col].isnull().any():
         # Fill null values with the mean of the column
         df[col] = df[col].fillna(df[col].mean())
-    else:
-        print(f"Column {col} does not contain null values.")
+
 
 # Check for NaN values in the dataset
 nan_cols = df.columns[df.isnull().any()].tolist()
@@ -125,10 +121,6 @@ print(f"After dropping NaN values, dataset shape: {df.shape}")
 # Check the first few rows to understand the data
 print("\nFirst 5 rows of cleaned data:")
 print(df.head())
-
-# Check data types
-print("\nCleaned data types:")
-print(df.dtypes)
 
 # Save the cleaned data if needed
 df.to_csv('cleaned_financial_data.csv')
@@ -193,12 +185,18 @@ plt.show()
 print(f"Correlation between Book-to-Market and Returns: {df[btm_col].corr(df[returns_col]):.4f}")
 
 # 3. Split data into training and testing sets
-X_unscaled = df.drop(columns='ret')
-X_unscaled = X_unscaled.apply(pd.to_numeric, errors='coerce')
-X = (X_unscaled-X_unscaled.mean(axis=0))/X_unscaled.std(axis=0)
 
-y = df['ret']
-y = y.apply(pd.to_numeric, errors='coerce')
+#which one to use ? this (Alex stuff) or
+# X_unscaled = df.drop(columns='ret')  # dimenseion error if I use this
+# X_unscaled = X_unscaled.apply(pd.to_numeric, errors='coerce')
+# X = (X_unscaled-X_unscaled.mean(axis=0))/X_unscaled.std(axis=0) #Is needed for linear regression to rescale ?
+
+# y = df['ret']
+# y = y.apply(pd.to_numeric, errors='coerce')
+
+#use this ? 
+X = df[btm_col].values.reshape(-1, 1)
+y = df[returns_col].values
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 print(f"Training set: {X_train.shape[0]} samples")
